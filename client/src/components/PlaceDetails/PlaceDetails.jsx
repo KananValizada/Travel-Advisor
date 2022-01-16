@@ -11,12 +11,15 @@ import {
 } from "@material-ui/core";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PhoneIcon from "@material-ui/icons/Phone";
-import Rating from "@material-ui/lab";
+import Rating from "@material-ui/lab/Rating";
 
 import useStyles from "./styles";
 
-const PlaceDetails = ({ place }) => {
+const PlaceDetails = ({ place, selected, refProp }) => {
   const classes = useStyles();
+
+  if (selected)
+    refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <Card elevation={6}>
@@ -29,6 +32,12 @@ const PlaceDetails = ({ place }) => {
         <Typography gutterBottom variant="h5">
           {place.name}
         </Typography>
+        <Box display="flex" justifyContent="space-between">
+          <Rating value={Number(place.rating)} readOnly />
+          <Typography gutterBottom variant="subtitle1">
+            out of {place.num_reviews}
+          </Typography>
+        </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="subtitle1">Price</Typography>
           <Typography gutterBottom variant="subtitle1">
@@ -47,9 +56,9 @@ const PlaceDetails = ({ place }) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <img src={award.images.small} alt={award.display._name} />
+            <img src={award.images.small} alt={award?.display?._name} />
             <Typography variant="subtitle2" coloe="text-secondary">
-              {award.display._name}
+              {award?.display?._name}
             </Typography>
           </Box>
         ))}
@@ -84,6 +93,13 @@ const PlaceDetails = ({ place }) => {
             onClick={() => window.open(place.web_url, "_blank")}
           >
             Trip Advisor
+          </Button>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => window.open(place.website, "_blank")}
+          >
+            Website
           </Button>
         </CardActions>
       </CardContent>
